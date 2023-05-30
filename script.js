@@ -4,26 +4,26 @@ if (localStorage.getItem("favouritesList") == null) {
 }
 
 // it fetches meals from api and return it
-async function fetchMealsFromApi(url,value) {
-    const response=await fetch(`${url+value}`);
-    const meals=await response.json();
+async function fetchMealsFromApi(url, value) {
+    const response = await fetch(`${url + value}`);
+    const meals = await response.json();
     return meals;
 }
 
 // it show's all meals card in main acording to search input value
-function showMealList(){
+function showMealList() {
     let inputValue = document.getElementById("my-search").value;
-    let arr=JSON.parse(localStorage.getItem("favouritesList"));
-    let url="https://www.themealdb.com/api/json/v1/1/search.php?s=";
+    let arr = JSON.parse(localStorage.getItem("favouritesList"));
+    let url = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
     let html = "";
-    let meals=fetchMealsFromApi(url,inputValue);
-    meals.then(data=>{
+    let meals = fetchMealsFromApi(url, inputValue);
+    meals.then(data => {
         if (data.meals) {
             data.meals.forEach((element) => {
-                let isFav=false;
+                let isFav = false;
                 for (let index = 0; index < arr.length; index++) {
-                    if(arr[index]==element.idMeal){
-                        isFav=true;
+                    if (arr[index] == element.idMeal) {
+                        isFav = true;
                     }
                 }
                 if (isFav) {
@@ -34,7 +34,7 @@ function showMealList(){
                         <h5 class="card-title">${element.strMeal}</h5>
                         <div class="d-flex justify-content-between mt-5">
                             <button type="button" class="btn btn-outline-light" onclick="showMealDetails(${element.idMeal})">More Details</button>
-                            <button id="main${element.idMeal}" class="btn btn-outline-light active" onclick="addRemoveToFavList(${element.idMeal})" style="border-radius:50%"><i class="fa-solid fa-heart"></i></button>
+                            <button id="main${element.idMeal}" class="btn btn-outline-light active" onclick="addRemoveToFavList(${element.idMeal})" style="border-radius:50%"><i class="fa-solid fa-heart" style="color: #ff0000;"></i></button>
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@ function showMealList(){
                     </div>
                 </div>
                 `;
-                }  
+                }
             });
         } else {
             html += `
@@ -76,9 +76,9 @@ function showMealList(){
 
 //it  shows full meal details in main
 async function showMealDetails(id) {
-    let url="https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
-    let html="";
-    await fetchMealsFromApi(url,id).then(data=>{
+    let url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
+    let html = "";
+    await fetchMealsFromApi(url, id).then(data => {
         html += `
           <div id="meal-details" class="mb-5">
             <div id="meal-header" class="d-flex justify-content-around flex-wrap">
@@ -102,7 +102,7 @@ async function showMealDetails(id) {
           </div>
         `;
     });
-    document.getElementById("main").innerHTML=html;
+    document.getElementById("main").innerHTML = html;
 }
 
 
@@ -110,10 +110,10 @@ async function showMealDetails(id) {
 
 // it shows all favourites meals in favourites body
 async function showFavMealList() {
-    let arr=JSON.parse(localStorage.getItem("favouritesList"));
-    let url="https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
-    let html="";
-    if (arr.length==0) {
+    let arr = JSON.parse(localStorage.getItem("favouritesList"));
+    let url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
+    let html = "";
+    if (arr.length == 0) {
         html += `
             <div class="page-wrap d-flex flex-row align-items-center">
                 <div class="container">
@@ -130,7 +130,7 @@ async function showFavMealList() {
             `;
     } else {
         for (let index = 0; index < arr.length; index++) {
-            await fetchMealsFromApi(url,arr[index]).then(data=>{
+            await fetchMealsFromApi(url, arr[index]).then(data => {
                 html += `
                 <div id="card" class="card mb-3" style="width: 20rem;">
                     <img src="${data.meals[0].strMealThumb}" class="card-img-top" alt="...">
@@ -138,24 +138,24 @@ async function showFavMealList() {
                         <h5 class="card-title">${data.meals[0].strMeal}</h5>
                         <div class="d-flex justify-content-between mt-5">
                             <button type="button" id="details-btn" class="btn btn-outline-light" onclick="showMealDetails(${data.meals[0].idMeal})">More Details</button>
-                            <button id="main${data.meals[0].idMeal}" class="btn btn-outline-light active" onclick="addRemoveToFavList(${data.meals[0].idMeal})" style="border-radius:50%"><i class="fa-solid fa-heart"></i></button>
+                            <button id="main${data.meals[0].idMeal}" class="btn btn-outline-light active" onclick="addRemoveToFavList(${data.meals[0].idMeal})" style="border-radius:50%"><i class="fa-solid fa-heart" style="color: #ff0000;"></i></button>
                         </div>
                     </div>
                 </div>
                 `;
-            });   
+            });
         }
     }
-    document.getElementById("favourites-body").innerHTML=html;
+    document.getElementById("favourites-body").innerHTML = html;
 }
 
 //it adds and remove meals to favourites list
 function addRemoveToFavList(id) {
-    let arr=JSON.parse(localStorage.getItem("favouritesList"));
-    let contain=false;
+    let arr = JSON.parse(localStorage.getItem("favouritesList"));
+    let contain = false;
     for (let index = 0; index < arr.length; index++) {
-        if (id==arr[index]) {
-            contain=true;
+        if (id == arr[index]) {
+            contain = true;
         }
     }
     if (contain) {
@@ -166,7 +166,7 @@ function addRemoveToFavList(id) {
         arr.push(id);
         alert("Meal added to favourites list");
     }
-    localStorage.setItem("favouritesList",JSON.stringify(arr));
+    localStorage.setItem("favouritesList", JSON.stringify(arr));
     showMealList();
     showFavMealList();
 }
