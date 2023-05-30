@@ -17,7 +17,7 @@ function showMealList() {
     let url = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
     let html = "";
     let meals = fetchMealsFromApi(url, inputValue);
-    meals.then(data => {
+    meals.then((data) => {
         if (data.meals) {
             data.meals.forEach((element) => {
                 let isFav = false;
@@ -78,7 +78,7 @@ function showMealList() {
 async function showMealDetails(id) {
     let url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
     let html = "";
-    await fetchMealsFromApi(url, id).then(data => {
+    await fetchMealsFromApi(url, id).then((data) => {
         html += `
           <div id="meal-details" class="mb-5">
             <div id="meal-header" class="d-flex justify-content-around flex-wrap">
@@ -105,9 +105,6 @@ async function showMealDetails(id) {
     document.getElementById("main").innerHTML = html;
 }
 
-
-
-
 // it shows all favourites meals in favourites body
 async function showFavMealList() {
     let arr = JSON.parse(localStorage.getItem("favouritesList"));
@@ -130,7 +127,7 @@ async function showFavMealList() {
             `;
     } else {
         for (let index = 0; index < arr.length; index++) {
-            await fetchMealsFromApi(url, arr[index]).then(data => {
+            await fetchMealsFromApi(url, arr[index]).then((data) => {
                 html += `
                 <div id="card" class="card mb-3" style="width: 20rem;">
                     <img src="${data.meals[0].strMealThumb}" class="card-img-top" alt="...">
